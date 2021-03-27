@@ -30,6 +30,8 @@ class MainActivity : AppCompatActivity() {
 
     private var adapter: PicsumAdapter? = null
 
+    var page = 1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,8 +57,8 @@ class MainActivity : AppCompatActivity() {
     private fun getLists()
     {
         val params = HashMap<String, Int>()
-        params["page"] = 1
-        params["limit"] = 10
+        params["page"] = page
+        params["limit"] = 30
         lifecycleScope.launch {
             picsumViewModel.loadListFromWeb(params)
         }
@@ -67,6 +69,10 @@ class MainActivity : AppCompatActivity() {
                         resourceData.data?.observe(
                             this@MainActivity,
                             { lists ->
+                                if(page == 1)
+                                {
+                                    adapter?.items?.clear()
+                                }
                                 adapter?.setData(lists)
                             })
                     }
